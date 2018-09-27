@@ -37,8 +37,30 @@ app.get('/', (req, res) => {
 const router = require('./app/routes');
 app.use(router);
 
+// SOCKET
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
+io.on('connection', (socket) => {
+  console.log('a client connected', socket.id, '\n');
+
+  socket.on('create-todo', (data) => {
+    console.log('client send todo...', socket.id, data, '\n');
+    socket.emit('new-todo', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('client disconnect...', socket.id, '\n');
+  });
+
+  socket.on('error', (err) => {
+    console.log('received error from client:', socket.id, '\n');
+    console.log(err)
+  });
+});
+
 // Run server
 const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log('Server is listening on port 8080');
+http.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
 });
