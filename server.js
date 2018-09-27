@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 // Configuring the database
 const dbConfig = require('./config/database.config.js');
 const mongoose = require('mongoose');
+mongoose.set('useFindAndModify', false);
 mongoose.Promise = global.Promise;
 // Connecting to the database
 mongoose.connect(dbConfig.url, {
