@@ -33,7 +33,9 @@ app.get('/', (req, res) => {
   })
 });
 
-require('./app/routes/todo.routes.js')(app);
+// Routes
+const router = require('./app/routes');
+app.use(router);
 
 // Run server
 app.listen(8080, () => {
