@@ -30,6 +30,8 @@ app.get('/', (req, res) => {
   })
 });
 
+require('./app/routes/todo.routes.js')(app);
+
 // Run server
 app.listen(8080, () => {
   console.log('Server is listening on port 8080');
