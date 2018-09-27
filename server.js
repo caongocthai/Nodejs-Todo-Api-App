@@ -1,12 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+var cors = require('cors')
 
 // Create app
 const app = express();
 
 // Use middleware
-app.use(morgan('combined'));
+app.use(cors());
+app.use(morgan('short'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -46,7 +48,16 @@ io.on('connection', (socket) => {
 
   socket.on('create-todo', (data) => {
     console.log('client send todo...', socket.id, data, '\n');
-    socket.emit('new-todo', data);
+    setTimeout(() => {
+      io.emit('reload-todos', data);
+    }, 50);
+  });
+
+  socket.on('delete-todo', (data) => {
+    console.log('client delete todo...', socket.id, data, '\n');
+    setTimeout(() => {
+      io.emit('reload-todos', data);
+    }, 50);
   });
 
   socket.on('disconnect', () => {
